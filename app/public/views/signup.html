@@ -1,0 +1,20 @@
+<h1>Signup</h1>
+<form id="signup" name="Form" ng-submit="signup.doSignup()">
+
+    <div class="row">
+        <label for="name">Name</label>
+        <input type="text" name="name" ng-model="signup.signupData.name" />
+    </div>
+
+    <div class="row">
+        <label for="email">Email</label>
+        <input type="text" name="login" ng-model="signup.signupData.email" />
+    </div>
+
+    <div class="row">
+        <label for="password">Password</label>
+        <input type="password" name="password" ng-model="signup.signupData.password" />
+    </div>
+
+    <button type="submit">Signup</button>
+</form>

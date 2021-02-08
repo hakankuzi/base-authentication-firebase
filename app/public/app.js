@@ -1,33 +1,8 @@
-var app = angular.module('app', ['ngRoute', 'IndexCtrl', 'MainPageCtrl', 'LoginCtrl', 'MockDataService']);
+var app = angular.module('app', ['ngRoute', 'IndexCtrl', 'ProfileCtrl', 'MainPageCtrl', 'LoginCtrl', 'SignupCtrl', 'AuthDataService', 'MockDataService']);
 
 
 // Environments -----------------------------------------
 app.run(function($rootScope, $location, $route, $window) {
-    const config = {
-        apiKey: "AIzaSyA0xoTKvyTZJL3x5bleuR9-cL89lEneq5k",
-        authDomain: "functions-base.firebaseapp.com",
-        projectId: "functions-base",
-        storageBucket: "functions-base.appspot.com",
-        messagingSenderId: "540497239941",
-        appId: "1:540497239941:web:38f0d7ed71b24846b02eec",
-        measurementId: "G-1LKNBNJM5Z"
-    }
-
-
-    // Initialize Firebase
-    firebase.initializeApp(config);
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            console.log('user signed id')
-                // User is signed in.
-        } else {
-            console.log('user not signed')
-                // No user is signed in.
-        }
-    });
-
 
 
     $rootScope.apis = {};
@@ -58,8 +33,17 @@ app.config(function($routeProvider, $locationProvider, $httpProvider) {
             controller: 'LoginController',
             controllerAs: 'login',
         })
+        .when('/signup', {
+            templateUrl: '../views/signup.html',
+            controller: 'SignupController',
+            controllerAs: 'signup',
+        })
+        .when('/profile', {
+            templateUrl: '../views/profile.html',
+            controller: 'ProfileController',
+            controllerAs: 'profile',
+        })
         .otherwise("/");
-
 
     $locationProvider.html5Mode({
         enabled: true,
