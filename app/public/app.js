@@ -2,18 +2,33 @@ var app = angular.module('app', ['ngRoute', 'IndexCtrl', 'ProfileCtrl', 'MainPag
 
 
 // Environments -----------------------------------------
-app.run(function($rootScope, $location, $route, $window) {
+app.run(function($rootScope, $location, $route, $window, AuthWrapper) {
 
 
     $rootScope.apis = {};
     $rootScope.apis.createSession = "/api/createSession";
     $rootScope.apis.generateToken = "/api/generateToken";
 
-    $rootScope.$on("$locationChangeStart", function(event, next, current) {});
+    $rootScope.$on("$locationChangeStart", function(event, next, current) {
+        let token = AuthWrapper.getToken();
+
+        if (token === null) {
+            $location.path('/');
+        } else {
+            if ($location.path() === '/' || $location.path() === '/signup') {
+                $location.path('/profile');
+            }
+        }
+    });
 
 
     // Change Route and Check Authorize -------------------------------------
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {});
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+
+
+
+
+    });
     // -----------------------------------------------------------------
 });
 

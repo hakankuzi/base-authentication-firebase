@@ -18,6 +18,13 @@ LoginCtrl.controller('LoginController', function($rootScope, $window, $scope, Au
 
     vm.doLoginWithGoogleAuthentication = function() {
         AuthWrapper.signInWithGoogleAuthentication(response => {
+
+
+
+            $location.path('/profile')
+
+            $scope.$apply();
+
             console.log(response);
         })
     }

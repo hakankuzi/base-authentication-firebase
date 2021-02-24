@@ -5,7 +5,6 @@ var AuthDataService = angular.module('AuthDataService', []);
 // https://www.youtube.com/watch?v=wSnhZ22EKjc
 
 AuthDataService.service('AuthWrapper', function($http, $window, $rootScope, $location) {
-
     const authService = {};
 
     const config = {
@@ -21,14 +20,6 @@ AuthDataService.service('AuthWrapper', function($http, $window, $rootScope, $loc
     // Initialize Firebase
     firebase.initializeApp(config);
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (!user && $location.path() !== '/signup') {
-            $location.path('/');
-            $rootScope.$apply();
-        }
-    });
-
 
     authService.signInWithGoogleAuthentication = function(callback) {
         const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -91,6 +82,20 @@ AuthDataService.service('AuthWrapper', function($http, $window, $rootScope, $loc
         });
     }
 
+    authService.verifyToken = function(callback) {
+        $http({
+            url: 'https://us-central1-functions-base.cloudfunctions.net/authservice-verifyIdToken',
+            method: 'POST',
+            data: authService.getToken(),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(function(response) {
+            callback(response);
+        }).catch(error => {
+            callback({ code: '400', type: error.code, message: error.message });
+        });
+
+    }
+
 
     authService.addUserToDB = function(item, callback) {
         $http({
@@ -119,7 +124,6 @@ AuthDataService.service('AuthWrapper', function($http, $window, $rootScope, $loc
         }
     }
 
-
     function setToken(token) {
         if (token) {
             $window.localStorage.setItem('token', token);
@@ -128,7 +132,7 @@ AuthDataService.service('AuthWrapper', function($http, $window, $rootScope, $loc
         }
     }
 
-    function getToken() {
+    authService.getToken = function() {
         return $window.localStorage.getItem('token');
     }
     return authService;
